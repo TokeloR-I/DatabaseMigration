@@ -1,11 +1,29 @@
-# DatabaseMigration
-DatabaseMigration tool if you have 2 databases with the same name schema etc , and you dont want the data to mix together 
+Database Migration Tool
+This PowerShell script is designed to streamline the process of migrating a database by detaching an existing database and attaching a new one with the same name. This is particularly useful when you have a new version of a database file (e.g., a .mdf file) and want to swap it into an existing SQL Server instance without causing data conflicts.
 
-small Application will ask for DB instance name /n
-ask for db instance login(Sysadmin recommended) /n
-database with same name will be detached /n
-will attach new db /n
-if you have an orphan script I recommend you to rename it to Orphan_fix.sql /n/n
+How It Works
+The script automates the following steps:
 
-known bugs /n
-error generated if the db files do not have the right permissions for DB admin (recommend manually adding full rights for DB owner on Microsoft)
+Prompts for Credentials: It will ask you to enter the SQL Instance name, a database admin username, and a password.
+
+File Selection: A file dialog will open, prompting you to select the .mdf file for the new database.
+
+Database Detachment: It checks for any existing database with the same name and safely detaches it.
+
+Database Attachment: It then attaches the newly selected database file.
+
+Orphan Fix (Optional): If a specific script is found, it will automatically run it to fix any orphaned users in the new database.
+
+Prerequisites
+You must have Sysadmin privileges on the SQL Server instance to run this tool.
+
+The sqlcmd utility must be available in your system's path.
+
+Optional: Orphan Fix Script
+The script can automatically run a fix for orphaned users. To use this feature, simply place a SQL script in the same directory as the PowerShell script and name it orphan_fix.sql. The tool will detect and execute this script on the newly attached database.
+
+Troubleshooting
+File Permissions Error
+If you see an error related to file permissions during the attach process, it means the SQL admin user does not have the necessary rights to the .mdf and .ldf files.
+
+Recommendation: Manually grant Full Control permissions to the database owner or the SQL Server service account for the database files before running the script.
